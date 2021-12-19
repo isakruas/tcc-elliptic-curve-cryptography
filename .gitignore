@@ -21,4 +21,5 @@
 *.mtc1
 *.out
 *.pdf
+*.idea
 *.synctex.gz

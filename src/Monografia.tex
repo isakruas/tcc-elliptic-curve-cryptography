@@ -1,0 +1,102 @@
+\documentclass{IFNMG}
+
+
+% =========================================================
+% Adicione aqui os pacotes extras, caso necessário.
+%
+\usepackage{tasks, enumerate, diagbox, ulem, multicol, cancel}
+
+
+% ===============================================
+% Abreviação de Comandos e novos comandos
+%
+\theoremstyle{definition}
+\newtheorem{teorema}{Teorema}[subsection]
+\newtheorem{definicao}{Definição}[subsection]
+\newtheorem{exemplo}{Exemplo}[subsection]
+\newtheorem{observacao}{Observação}[subsection]
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\md}{\text{mod  )}}
+
+% =========================================================
+% Hifenização de Palavras
+%
+\hyphenation{ci-vi-li-za-ções}
+
+
+\begin{document}
+% =========================================================
+% INFORMAÇÕES SOBRE O TCC
+%
+\author{Isak Paulo de Andrade}{Ruas}
+\title{Criptografia de curvas elípticas sobre corpos de Galois:}{um estudo de caso}
+\orientador{Dr. Josué Antunes de Macêdo}
+\coOrientador{}
+\graduacao{Licenciatura}{Matemática}
+\campus{Januária}{MG}
+\date{Janeiro}{2022}
+
+
+%%%% Banca Avaliadora
+\avaliadorUm{Lílian Isabel Ferreira Amorim}
+\avaliadorDois{Adriana Martins da Silva Castro}
+
+
+% =========================================================
+% ELEMENTOS PRÉ-TEXTUAIS
+%
+%\maketitle			% Cria Capa e Folha de Rosto
+%
+%\folhaDeAprovacao
+%
+%\listaDeFiguras
+%\listaDeTabelas
+%
+%\dedicatoria
+%\agradecimentos
+%\epigrafe
+%
+%\resumo
+%
+%\sumario
+
+% =========================================================
+% ELEMENTOS TEXTUAIS
+%%%%% Introdução
+\input{Introducao/introducao}
+%
+%%%%%% Revisão da Literatura
+\newpage
+\input{Literatura/literatura}
+%
+%%%%%% Metodologia
+\newpage
+\input{Metodologia/metodologia}
+%
+%%%%%% Resultados e Discussões
+%\newpage
+%\input{Resultados/resultados}
+%
+%%%%%% Conclusão
+%\newpage
+%\input{Conclusao/conclusao}
+
+
+% =========================================================
+% ELEMENTOS PÓS-TEXTUAIS: referências; anexos
+%%%%% Referências
+%\referencias
+%
+%%%%%% Apêncies
+%\apendices
+%
+%%%%%% Apêncies
+%\anexos
+
+\end{document}

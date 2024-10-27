@@ -1,64 +1,96 @@
+% **
+% Classe para formatação de Monografia do Instituto Federal do Norte de Minas Gerais - Campus Januária.
+%
+% Autores:  Marcos Miller Martins da Silva	(mmarcos.miller@gmail.com)
+%           Ítalo Antônio de Brito			(italoantonioitalojanu@gmail.com)
+%			Gustavo Pereira Gomes			(gustavo.gomes@ifnmg.edu.br)
+% *
 \LoadClass[12pt, a4paper]{article}
 
-%%%%% CARREGANDO PACOTES
+% **
+% Carregando pacotes.
+% *
 \RequirePackage[utf8]{inputenc}
-\RequirePackage[T1]{fontenc}	% Hifenização em Português Brasil
+\RequirePackage[T1]{fontenc}% Hifenização em Português Brasil
 \RequirePackage[brazilian]{babel}
-\RequirePackage[left=3cm, top=2.5cm, right=2.5cm, bottom=2.5cm]{geometry}
-\RequirePackage{times}	% Fonte Times New Roman
-\RequirePackage{amsmath, amssymb, amsfonts, amsthm, exscale}	% Pacotes Matemáticos
 
-\RequirePackage[pdftex,colorlinks=true,linkcolor=black,urlcolor=black,anchorcolor=black,citecolor=black,filecolor=black,menucolor=black]{hyperref}
 
-\RequirePackage{url}\urlstyle{same}				% Os link ficam com a mesma fonte do texto
-\RequirePackage{setspace}						% Configurações do Texto
-\RequirePackage{indentfirst}					% Primeiro parágrfo identado
-\RequirePackage{titletoc, titlesec, tocloft}	% Configurar seção/subseção
-\RequirePackage{fancyhdr}						% Configurar o estilo da página. Cabeçalho/Rodapé/Número de página
-\RequirePackage{graphicx} 						% Inserir imagens/figuras
-\RequirePackage{subcaption}						% Configurar legendas das figuras/tabelas
-\RequirePackage{footmisc}						% Config. citação de nota de rodapé
-\RequirePackage{adjustbox, array}				% Rotacionar a tabela e aumentar a largura da coluna
+\RequirePackage[
+	left=3cm,
+	top=2.5cm,
+	right=2.5cm,
+	bottom=2.5cm
+]{geometry}
+
+\RequirePackage{times}% Fonte Times New Roman
+
+\RequirePackage{
+	amsmath,
+	amssymb,
+	amsfonts,
+	amsthm,
+	exscale
+}% Pacotes Matemáticos
+
+\RequirePackage[
+	pdftex,
+	colorlinks = true,
+	linkcolor = black,
+	urlcolor = black,
+	anchorcolor = black,
+	citecolor = black,
+	filecolor = black,
+	menucolor = black
+]{hyperref}
+
+\RequirePackage{url}\urlstyle{same}% Os link ficam com a mesma fonte do texto
+\RequirePackage{setspace}% Configurações do Texto
+\RequirePackage{indentfirst}% Primeiro parágrfo identado
+\RequirePackage{titletoc, titlesec, tocloft}% Configurar seção/subseção
+\RequirePackage{fancyhdr}% Configurar o estilo da página. Cabeçalho/Rodapé/Número de página
+\RequirePackage{graphicx}% Inserir Imagens/figuras
+\RequirePackage{subcaption}% Configurar legendas das figuras/tabelas
+\RequirePackage{footmisc}% Config. citação de nota de rodapé
+\RequirePackage{adjustbox, array}% Rotacionar a tabela e aumentar a largura da coluna
 \RequirePackage{xifthen}
 \RequirePackage{etoolbox}
 
-
-%%%%% PACOTES TEMPORÁRIOS
+%%%% Pacotes temporários, não necessário para a formatação da monografia.
 \RequirePackage{lipsum}
 
+% **
+% Configurações gerais.
+% *
 
-%%%%% CONFIGURANDO TEXTO
-\setlength{\parindent}{1.5cm}	% Identação dos parágrafos
-\onehalfspacing                 % Espaçamento entre linhas 1,5cm como padrão. Para duplo: \doublespacing; simples: \singlespacing
-\setlength{\parskip}{12pt}		% Espaçamento entre os parágrafos
+%%%% Texto
+\setlength{\parindent}{1.5cm}\onehalfspacing\setlength{% Identação dos parágrafos% Espaçamento entre linhas 1,5cm como padrão. Para duplo: \doublespacing; simples: \singlespacing
+	\parskip}{12pt}% Espaçamento entre os parágrafos
 
+%%%% Estilo da página
+\pagestyle{fancy}\fancyhf{}
 
-%%%%% CONFIG. ESTILO DE PÁGINA
-\pagestyle{fancy}\fancyhf{}	
-%% Cabeçalho
+%%%% Cabeçalho
 %\fancyhead[RO]{\vspace*{1\baselineskip}\thepage}
 %\fancyhead[RE,LO]{TCC}
-\renewcommand{\headrulewidth}{0pt}	% Espessura da linha de base
-%% Rodapé
+\renewcommand{\headrulewidth}{0pt}% Espessura da linha de base
+
+%%%% Rodapé
 %\fancyfoot[CE,CO]{\leftmark}
 \fancyfoot[RO]{\vspace*{-1\baselineskip}\thepage}
 %\renewcommand{\footrulewidth}{0pt}
 
-
-%%% CONFIG. CITAÇÃO DE NOTA DE RODAPÉ
+%%%% Citação de nota de rodapé
 \setlength{\footnotemargin}{0cm}
 \renewcommand{\hangfootparindent}{0cm}
 \newcommand\snfootnote[1]{%
 	\begingroup%
-		\renewcommand\thefootnote{}\footnote{#1}%
-		\addtocounter{footnote}{-1}%
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
 	\endgroup%
 }
 
-
-%%%%% CONFIG. ESTILO DA SECÇÃO/SUBSECÇÃO/PARÁGRAFOS
-% Diminuir tamanho da fonte e espaçamentos. \normalsize equivale à 12pt
-\titleformat{\section}{\normalsize\bfseries}{\thesection}{12pt}{}
+%%%% Estilo da secção, subsecção e parágrafos
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{12pt}{}% Diminuir tamanho da fonte e espaçamentos. \normalsize equivale à 12pt
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{12pt}{}
 \titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{12pt}{}
 %\titleformat*{\paragraph}{\large\bfseries}
@@ -67,14 +99,12 @@
 \titlespacing{\subsection}{0pt}{0pt}{0pt}
 \titlespacing{\subsubsection}{0pt}{0pt}{0pt}
 
-
-%%%%% CONFIG. LEGENDAS DAS FIGURAS/TABELAS
+%%%% Legendas das figuras e tabelas
 \captionsetup[figure]{labelfont={bf}, labelsep=endash}
 \captionsetup[subfigure]{labelfont={normal}}
 \captionsetup[table]{labelfont={bf}, labelsep=endash}
 
-
-%%%%% CONFIG. SUMÁRIO
+%%%% Sumário
 \newcommand{\sumario}{%
 	\clearpage\tocloftpagestyle{empty}%
 	\renewcommand{\cfttoctitlefont}{\bf\hfill\normalsize\MakeUppercase}%
@@ -84,12 +114,11 @@
 	\renewcommand{\cftsecpagefont}{\normalfont}%
 	\setlength{\cftsubsecindent}{0em}%
 	\setlength{\cftsubsubsecindent}{0em}%
-%	\renewcommand{\contentsname}{SUMÁRIO}
+	%	\renewcommand{\contentsname}{SUMÁRIO}
 	\tableofcontents\newpage%
 }
 
-
-%%%%% CONFIG. LISTA DE FIGURAS
+%%%% Lista de figuras
 \newcommand{\listaDeFiguras}{%
 	\clearpage\tocloftpagestyle{empty}%
 	\renewcommand{\cftloftitlefont}{\hfill\bf\normalsize\MakeUppercase}%
@@ -100,8 +129,7 @@
 	\listoffigures\newpage%
 }
 
-
-%%%%% CONFIG. LISTA DE TABELAS
+%%%% Lista de tabelas
 \newcommand{\listaDeTabelas}{%
 	\clearpage\tocloftpagestyle{empty}%
 	\renewcommand{\cftlottitlefont}{\hfill\bf\normalsize\MakeUppercase}%
@@ -112,8 +140,7 @@
 	\listoftables\newpage%
 }
 
-
-%%%%% CONFIG. CAPA E FOLHA DE ROSTO
+%%%% Dados que irão na Capa, folha de rosto e resumo
 \newcommand{\campus}[2]{\gdef\cidade{#1}\gdef\estado{#2}}
 \newcommand{\graduacao}[2]{\gdef\tipo{#1} \gdef\curso{#2}}
 \renewcommand{\author}[2]{\gdef\@autorprimeiro{#1} \gdef\@autorsegundo{#2}}
@@ -124,43 +151,43 @@
 \newcommand{\avaliadorDois}[1]{\gdef\@avaliadorDois{#1}}
 \renewcommand{\date}[2]{\gdef\@mes{#1} \gdef\@ano{#2}}
 
-
+%%%% Capa e folha de rosto
 \renewcommand{\maketitle}{%
 	\pagenumbering{arabic}
 	\clearpage\thispagestyle{empty}
 	\begin{center}
 		\begin{singlespace}
 			\MakeUppercase{\textbf{\Large Instituto Federal de Educação, Ciência e Tecnologia do Norte de Minas Gerais}}
-			
+
 			\vspace*{0.4cm}\MakeUppercase{\textbf{\Large Campus~\cidade}}
-			
+
 			\vspace*{1cm}\MakeUppercase{\textbf{\Large Curso Superior de~\tipo~em~\curso}}
-			
+
 			\vspace*{\stretch{0.7}}\MakeUppercase{\textbf{\Large Trabalho de Conclusão de Curso}}
-			
+
 			\vspace*{\stretch{0.5}}\MakeUppercase{\textbf{\large\titulo\ifdefempty{\subtitulo}{}{: \subtitulo}}}
-			
+
 			\vspace*{\stretch{0.5}}\MakeUppercase{\textbf{\large\@autorprimeiro~\@autorsegundo}}
-			
+
 			\vspace*{\stretch{1}}\MakeUppercase{\textbf{\large\cidade~(\estado)}}\\
 			\textbf{\large\@ano}
 		\end{singlespace}
 	\end{center}
-%
+	%
 	\newpage\clearpage\thispagestyle{empty}
 	\begin{center}
 		\begin{singlespace}
 			\MakeUppercase{\textbf{\large Instituto Federal de Educação, Ciência e Tecnologia do Norte de Minas Gerais}}
-	
+
 			\vspace*{0.4cm}\MakeUppercase{\textbf{\large Campus~~\cidade}}
-	
+
 			\vspace*{1cm}\MakeUppercase{\textbf{\large Curso Superior de~\tipo~em~\curso}}
-	
+
 			\vspace*{\stretch{1.3}}\MakeUppercase{\textbf{\large\titulo\ifdefempty{\subtitulo}{}{: \subtitulo}}}
-	
+
 			\vspace*{\stretch{0.7}}\textbf{\MakeUppercase{\@autorprimeiro~\@autorsegundo}}
-			
-			\vspace*{0.7cm}\textit{Sob a orientação do Professor}\\
+
+			\vspace*{0.7cm}\textit{Sob a orientação do Professora}\\
 			\textbf{\@orientador}
 		\end{singlespace}
 	\end{center}
@@ -176,49 +203,41 @@
 	\end{center}
 }{}
 
-
-%%%%% NOVOS AMBIENTES E NOVOS COMANDOS
+%%%% Citação Longa
 \newenvironment{CitacaoLonga}{%
 	\begin{singlespace}%
 		\footnotesize%
-		\parindent=0mm		% indentação nos parágrafos
-		\noindent%
-		\ignorespaces%
-		\leftskip=4cm%
-}{%
-		\ignorespacesafterend%
+		\parindent=0mm\noindent\ignorespaces\leftskip=4cm}{\ignorespacesafterend%%%%%%
 	\end{singlespace}%
 }
 
+%%%% Referências
 \newcommand{\referencias}{%
-    \newpage%
-    \phantomsection\addcontentsline{toc}{section}{REFERÊNCIAS}
-    \section*{REFERÊNCIAS}
+	\newpage%
+	\phantomsection\addcontentsline{toc}{section}{REFERÊNCIAS}
+	\section*{REFERÊNCIAS}
 	\begin{singlespace}%
-            \vspace*{-0.35cm}%
-            \parindent=0mm%
-            \parskip=16pt%
-            \noindent%
-            \ignorespaces%
-            \flushleft%
-            \input{Referencias/referencias}
-            \ignorespacesafterend%
+		\vspace*{-0.35cm}%
+		\parindent=0mm%
+		\parskip=16pt\noindent\ignorespaces\flushleft\input{Referencias/referencias}
+		\ignorespacesafterend%%%%%
 	\end{singlespace}%
 }
 
-
+%%%% Apêndices
 \newcommand{\apendices}{ \ignorespacesafterend \input{Apendices/apendices}}
 \newcounter{apendicecount}
 \newcommand{\apendice}[1]{%
-    \newpage%
-    \refstepcounter{apendicecount}%
-    \phantomsection\addcontentsline{toc}{section}{APÊNDICE \Alph{apendicecount} -- #1}%
-    \begin{center}\bfseries APÊNDICE \Alph{apendicecount} -- #1\end{center}%
-    
-    \vspace*{-12pt}%
-    \ignorespacesafterend%
+	\newpage%
+	\refstepcounter{apendicecount}%
+	\phantomsection\addcontentsline{toc}{section}{APÊNDICE \Alph{apendicecount} -- #1}%
+	\begin{center}\bfseries APÊNDICE \Alph{apendicecount} -- #1\end{center}%
+	%
+	\vspace*{-12pt}%
+	\ignorespacesafterend%
 }
 
+%%%% Anexos
 \newcommand{\anexos}{\ignorespacesafterend \input{Anexos/anexos}}
 \newcounter{anexocount}
 \newcommand{\anexo}[1]{%
@@ -231,21 +250,21 @@
 	\ignorespacesafterend%
 }
 
+%%%% Resumo
 \newcommand{\resumo}{%
 	\clearpage\thispagestyle{empty}%
 	\begin{center} \textbf{RESUMO} \end{center}%
 	\vspace*{-0.8cm}%
 	\begin{singlespace}%
-		\parindent=0cm%
-		\noindent%
-		
+		\parindent=0cm\noindent%%
+
 		\MakeUppercase{\@autorsegundo}, \@autorprimeiro. \textbf{\titulo\ifdefempty{\subtitulo}{}{: }}\ifdefempty{\subtitulo}{}{\subtitulo}. \@ano. Monografia (Graduação em \tipo~em~\curso) Instituto Federal de Educação, Ciência e Tecnologia do Norte de Minas Gerais -- Campus \cidade, \cidade, \@ano.%
-		
+
 		\input{Resumo/resumo}
-	
+
 		\vspace*{1cm}%
-		
-		\snfootnote{\textbf{Orientador:} \@orientador}%
+
+		\snfootnote{\textbf{Orientadora:} \@orientador}%
 		\@ifundefined{@coOrientador}{}{%
 			\snfootnote{\textbf{Co-Orientador:} \@coOrientador}%
 		}%
@@ -254,58 +273,51 @@
 	\newpage%
 }
 
+%%%% Dedicatória
 \newcommand*{\dedicatoria}{%
 	\clearpage\thispagestyle{empty}%
 	\vspace*{\stretch{6}}%
 	\begin{singlespace}%
 		\normalsize%
-		\parindent=0mm%
-		\noindent%
-		\ignorespaces%
-		\leftskip=7cm%
-		\input{Pre-texto/dedicatoria}%
-		\ignorespacesafterend%
+		\parindent=0mm\noindent\ignorespaces\leftskip=7cm\input{Pre-texto/dedicatoria}\ignorespacesafterend%%%%%%
 	\end{singlespace}%
 	\newpage%
 }
 
+%%%% Agradecimentos
 \newcommand*{\agradecimentos}{%
 	\clearpage\thispagestyle{empty}%
 	\begin{center} \textbf{AGRADECIMENTOS} \end{center}%
 	\begin{onehalfspace}%
 		\parindent=0cm%
-		\parskip=6pt%
-		\input{Pre-texto/agradecimentos}
-    	\end{onehalfspace}%
+		\parskip=6pt\input{Pre-texto/agradecimentos}%
+	\end{onehalfspace}%
 	\newpage%
 }
 
+%%%% Epígrafe
 \newcommand{\autorEpigrafe}[1]{\gdef\autorEpigrafe{#1}}
 \newcommand{\epigrafe}{%
 	\clearpage\thispagestyle{empty}%
 	\vspace*{\stretch{5}}
 	\begin{singlespace}%
-	        \flushright%
+		\flushright%
 		\normalsize%
-		\parindent=0mm%
-		\noindent%
-		\ignorespaces%
-		\it%
-		\input{Pre-texto/epigrafe}
-		\ignorespacesafterend%
-		\normalfont{\autorEpigrafe}
+		\parindent=0mm\noindent\ignorespaces\it\input{Pre-texto/epigrafe}
+		\ignorespacesafterend\normalfont{\autorEpigrafe}%%%%%
 	\end{singlespace}%
 	%\vspace*{\stretch{1}}%
 }
 
+%%%% Folha de aprovação
 \newcommand{\folhaDeAprovacao}{%
 	\newpage\clearpage\thispagestyle{empty}
 	\begin{center}
 		\begin{singlespace}
 			\MakeUppercase{\textbf{\large Instituto Federal de Educação, Ciência e Tecnologia do Norte de Minas Gerais}}
-			
+
 			\vspace*{0.4cm}\MakeUppercase{\textbf{\large Campus~~\cidade}}
-			
+
 			\vspace*{\stretch{1.3}}\MakeUppercase{\textbf{\large\titulo~\subtitulo}}
 
 		\end{singlespace}
@@ -319,7 +331,7 @@
 	\vspace*{\stretch{1}}
 	\noindent APROVADO: \_\_\_\_/\_\_\_\_/\_\_\_\_\_\_
 	\vspace*{2cm}
-	
+
 	\begin{minipage}[c]{\linewidth}\hspace*{-2cm}
 		\begin{minipage}[l][2cm][l]{8cm}\centering
 			\rule{7cm}{1pt}\\
@@ -331,11 +343,11 @@
 			\vspace*{-0.2cm}\@avaliadorDois
 		\end{minipage}
 	\end{minipage}
-	
+
 	\vspace*{1.cm}
 	\begin{center}
 		\rule{7cm}{1pt}\\
 		\vspace*{-0.2cm}\@orientador \\
-		\vspace*{-0.2cm}(Orientador)
+		\vspace*{-0.2cm}(Orientadora)
 	\end{center}
 }

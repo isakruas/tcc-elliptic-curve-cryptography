@@ -1,0 +1,128 @@
+% **
+% Projeto para formatar monografia de acordo com as regras do Instituto Federa
+% do Norte de Minas Gerais - Campus Januária.
+%
+% Autores:  Marcos Miller Martins da Silva  (mmarcos.miller@gmail.com)
+%           Ítalo Antônio de Brito          (italoantonioitalojanu@gmail.com)
+%			Gustavo Pereira Gomes           (gustavo.gomes@ifnmg.edu.br)
+% *
+\documentclass{IFNMG}
+
+% **
+% Adicione aqui os pacotes extras, caso necessário.
+% *
+\usepackage{tasks, enumerate, diagbox, ulem, multicol, cancel}
+
+% **
+% Abreviações de Comandos e novos comandos.
+% *
+\theoremstyle{definition}
+\newtheorem{teorema}{Teorema}[subsection]
+\newtheorem{definicao}{Definição}[subsection]
+\newtheorem{exemplo}{Exemplo}[subsection]
+\newtheorem{observacao}{Observação}[subsection]
+\newtheorem{proposicao}{Proposição}[subsection]
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\md}{\text{ mod }}
+
+\usepackage{ragged2e}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{lscape}
+
+% **
+% Hifenização de palavras.
+%*
+\hyphenation{ci-vi-li-za-ções}
+
+% **
+% Início do documento.
+% *
+\begin{document}
+
+% Exemplo: \author{nome}{nome de citação}
+\author{\href{https://lattes.cnpq.br/4397351570177069}{Isak Paulo de Andrade}}{Ruas}
+
+% Exemplo: \title{título}{subtítulo}
+% Caso não tenha subtítulo deixe em branco conforme abaixo.
+\title{Desvendando a Criptografia de Curvas Elípticas}{Propriedades, Métodos e Implementação}
+
+\orientador{\href{https://lattes.cnpq.br/0567547569121826}{Me. Celimar Reijane Alves Damasceno Paiva}}
+\coOrientador{\href{https://lattes.cnpq.br/7059909954060830}{Me. Fernando Marcos Souza Silva}}
+
+
+% Exemplo: \graduacao{tipo da graduação}{nome do curso}
+\graduacao{Licenciatura}{Matemática}
+
+\campus{Januária}{MG}
+\date{Março}{2024}
+
+%%%%% Banca Avaliadora
+\avaliadorUm{\href{https://lattes.cnpq.br/9175354539481196}{Me. Samuel Chaves Dias}}
+\avaliadorDois{\href{https://lattes.cnpq.br/7059909954060830}{Me. Fernando Marcos Souza Silva}}
+
+% **
+% Elementos pré-textuais.
+% *
+
+%%%%% Cria Capa e Folha de Rosto.
+\maketitle
+
+\folhaDeAprovacao
+
+\listaDeFiguras
+\listaDeTabelas
+
+\dedicatoria
+\agradecimentos
+\epigrafe
+
+\resumo
+
+\sumario
+
+% **
+% Elementos textuais.
+% *
+
+%%%%% Introdução
+\input{Introducao/introducao}
+
+%%%%% Revisão da Literatura
+\newpage
+\input{Literatura/literatura}
+
+%%%%% Metodologia
+\newpage
+\input{Metodologia/metodologia}
+
+%%%%% Resultados e Discussões
+\newpage
+\input{Resultados/resultados}
+
+%%%%% Conclusão
+\newpage
+\input{Conclusao/conclusao}
+
+% **
+% Elementos pós-textuais: referências, apêndices e anexos.
+% *
+
+%%%%% Referências
+\referencias
+
+%%%%% Apêndices
+\apendices
+
+%%%%% Apêndices
+\anexos
+
+\end{document}

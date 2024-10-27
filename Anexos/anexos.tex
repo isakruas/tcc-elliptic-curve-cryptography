@@ -1,0 +1,648 @@
+% **
+% Anexos
+% *
+
+\anexo{Exemplo de implementação do método de Koblitz com a biblioteca ecutils (Script em Bash)} \label{anexo:0eca4a2b-8a60-41b3-8d25-2f8056b51dfd}
+\begin{verbatim}
+#!/bin/bash
+
+M_1="Matematica"
+
+echo -n "M_1 = {"
+
+for ((i=0; i<${#M_1}; i++)); do
+    echo -n "${M_1:i:1}" 
+    if [ $i -lt $((${#M_1}-1)) ]; then
+        echo -n ", " 
+    fi
+done
+
+echo "}" 
+
+echo -n "A_1 = {"
+
+for ((i=0; i<${#M_1}; i++)); do
+    echo -n "$(printf "%d" "'${M_1:i:1}'")"
+    if [ $i -lt $((${#M_1}-1)) ]; then
+        echo -n ", "
+    fi
+done
+
+echo "}"
+
+P=$(./ecutils -eck -eck-ec-get "secp192r1" \
+    -eck-encode \
+    -eck-encoding-type "ascii" \
+    -eck-encode-message "$M_1")
+
+J=$(echo "$P" | cut -d' ' -f3)
+
+J_decimal=$(echo "ibase=16; $J" | bc)
+
+echo "J = $J_decimal"
+
+Px=$(echo "$P" | cut -d' ' -f1)
+Py=$(echo "$P" | cut -d' ' -f2)
+
+Px_decimal=$(echo "ibase=16; $Px" | bc)
+Py_decimal=$(echo "ibase=16; $Py" | bc)
+
+echo "P = ($Px_decimal, $Py_decimal)"
+
+M_2=$(./ecutils -eck -eck-ec-get "secp192r1" \
+    -eck-decode \
+    -eck-encoding-type "ascii" \
+    -eck-decode-px "$Px" \
+    -eck-decode-py "$Py" \
+    -eck-decode-j "$J"
+)
+
+echo -n "A_2 = {"
+
+for ((i=0; i<${#M_2}; i++)); do
+    echo -n "$(printf "%d" "'${M_2:i:1}'")"
+    if [ $i -lt $((${#M_2}-1)) ]; then
+        echo -n ", "
+    fi
+done
+
+echo "}"
+
+echo -n "M_2 = {"
+
+for ((i=0; i<${#M_2}; i++)); do
+    echo -n "${M_2:i:1}" 
+    if [ $i -lt $((${#M_2}-1)) ]; then
+        echo -n ", " 
+    fi
+done
+
+echo "}" 
+    
+\end{verbatim}
+
+\anexo{Exemplo de implementação do protocolo de Diffie-Hellman com a biblioteca ecutils (Script em Bash)} \label{anexo:f9430204-a55e-4726-a4ca-167391db1ca3}
+\begin{verbatim}
+#!/bin/bash
+
+Gx=4
+Gy=5
+
+echo "G = ($Gx, $Gy)"
+
+d_A=9
+
+echo "d_A = $d_A"
+
+H_A=$(./ecutils -ec -ec-define \
+    -ec-define-p "B" \
+    -ec-define-a "1" \
+    -ec-define-b "1" \
+    -ec-trapdoor \
+    -ec-trapdoor-k "$d_A" \
+    -ec-trapdoor-gx "$Gx" \
+    -ec-trapdoor-gy "$Gy")
+
+H_Ax=$(echo "$H_A" | cut -d' ' -f1)
+H_Ay=$(echo "$H_A" | cut -d' ' -f2)
+
+echo "H_A = ($H_Ax, $H_Ay)"
+
+d_B=5
+
+echo "d_B = $d_B"
+    
+H_B=$(./ecutils -ec -ec-define \
+    -ec-define-p "B" \
+    -ec-define-a "1" \
+    -ec-define-b "1" \
+    -ec-trapdoor \
+    -ec-trapdoor-k "$d_B" \
+    -ec-trapdoor-gx "$Gx" \
+    -ec-trapdoor-gy "$Gy")
+
+H_Bx=$(echo "$H_B" | cut -d' ' -f1)
+H_By=$(echo "$H_B" | cut -d' ' -f2)
+
+echo "H_B = ($H_Bx, $H_By)"
+
+S_A=$(./ecutils -ec -ec-define \
+    -ec-define-p "B" \
+    -ec-define-a "1" \
+    -ec-define-b "1" \
+    -ec-trapdoor \
+    -ec-trapdoor-k "$d_A" \
+    -ec-trapdoor-gx "$H_Bx" \
+    -ec-trapdoor-gy "$H_By")
+
+S_Ax=$(echo "$S_A" | cut -d' ' -f1)
+S_Ay=$(echo "$S_A" | cut -d' ' -f2)
+
+echo "S_A = ($S_Ax, $S_Ay) : S_A = d_A * H_B"
+
+S_B=$(./ecutils -ec -ec-define \
+    -ec-define-p "B" \
+    -ec-define-a "1" \
+    -ec-define-b "1" \
+    -ec-trapdoor \
+    -ec-trapdoor-k "$d_B" \
+    -ec-trapdoor-gx "$H_Ax" \
+    -ec-trapdoor-gy "$H_Ay")
+
+S_Bx=$(echo "$S_B" | cut -d' ' -f1)
+S_By=$(echo "$S_B" | cut -d' ' -f2)
+
+echo "S_B = ($S_Bx, $S_By) : S_B = d_B * H_A"
+
+\end{verbatim}
+
+\anexo{Exemplo de implementação do protocolo de Massey-Omura com a biblioteca ecutils (Script em Bash)} \label{anexo:db563818-c103-45d8-8c07-544c5ad502b5}
+\begin{verbatim}
+#!/bin/bash
+
+M_Ax=4
+M_Ay=5
+
+echo "M_A = ($M_Ax, $M_Ay)"
+
+d_A=9
+d_A_i=B
+
+echo "d_A = $d_A"
+    
+H_A=$(./ecutils -ec -ec-define \
+    -ec-define-p "B" \
+    -ec-define-a "1" \
+    -ec-define-b "1" \
+    -ec-trapdoor \
+    -ec-trapdoor-k "$d_A" \
+    -ec-trapdoor-gx "$M_Ax" \
+    -ec-trapdoor-gy "$M_Ay")
+
+H_Ax=$(echo "$H_A" | cut -d' ' -f1)
+H_Ay=$(echo "$H_A" | cut -d' ' -f2)
+
+echo "H_A = ($H_Ax, $H_Ay)"
+
+d_B=5
+d_B_i=3
+
+echo "d_B = $d_B"
+
+H_B=$(./ecutils -ec -ec-define \
+    -ec-define-p "B" \
+    -ec-define-a "1" \
+    -ec-define-b "1" \
+    -ec-trapdoor \
+    -ec-trapdoor-k "$d_B" \
+    -ec-trapdoor-gx "$H_Ax" \
+    -ec-trapdoor-gy "$H_Ay")
+
+H_Bx=$(echo "$H_B" | cut -d' ' -f1)
+H_By=$(echo "$H_B" | cut -d' ' -f2)
+
+echo "H_B = ($H_Bx, $H_By)"
+
+echo "d_A_i = $d_A_i"
+S_A=$(./ecutils -ec -ec-define \
+    -ec-define-p "B" \
+    -ec-define-a "1" \
+    -ec-define-b "1" \
+    -ec-trapdoor \
+    -ec-trapdoor-k "$d_A_i" \
+    -ec-trapdoor-gx "$H_Bx" \
+    -ec-trapdoor-gy "$H_By")
+
+S_Ax=$(echo "$S_A" | cut -d' ' -f1)
+S_Ay=$(echo "$S_A" | cut -d' ' -f2)
+
+echo "S_A = ($S_Ax, $S_Ay)"
+
+echo "d_B_i = $d_B_i"
+M_A_2=$(./ecutils -ec -ec-define \
+    -ec-define-p "B" \
+    -ec-define-a "1" \
+    -ec-define-b "1" \
+    -ec-trapdoor \
+    -ec-trapdoor-k "$d_B_i" \
+    -ec-trapdoor-gx "$S_Ax" \
+    -ec-trapdoor-gy "$S_Ay")
+
+M_A_2x=$(echo "$M_A_2" | cut -d' ' -f1)
+M_A_2y=$(echo "$M_A_2" | cut -d' ' -f2)
+
+echo "M_A = ($M_A_2x, $M_A_2y)"
+
+\end{verbatim}
+
+\anexo{Exemplo de implementação do protocolo de ECDSA com a biblioteca ecutils (Script em Bash)} \label{anexo:c054fabc-cd0a-4724-b7e3-63d39dc9fa55}
+\begin{verbatim}
+#!/bin/bash
+
+# Parâmetros da curva elíptica
+ec_p_hex="5"
+ec_p_decimal=$(echo "ibase=16; $ec_p_hex" | bc)
+
+ec_a_hex="1D5D"
+ec_a_decimal=$(echo "ibase=16; $ec_a_hex" | bc)
+
+ec_b_hex="3CB"
+ec_b_decimal=$(echo "ibase=16; $ec_b_hex" | bc)
+
+ec_gx_hex="0"
+ec_gx_decimal=$(echo "ibase=16; $ec_gx_hex" | bc)
+
+ec_gy_hex="1"
+ec_gy_decimal=$(echo "ibase=16; $ec_gy_hex" | bc)
+
+ec_n_hex="7"
+ec_n_decimal=$(echo "ibase=16; $ec_n_hex" | bc)
+
+ec_h_hex="1"
+ec_h_decimal=$(echo "ibase=16; $ec_h_hex" | bc)
+
+# Exibir informações da curva elíptica
+echo "Parâmetros da curva elíptica:"
+echo "p = $ec_p_decimal"
+echo "a = $ec_a_decimal"
+echo "b = $ec_b_decimal"
+echo "n = $ec_n_decimal"
+echo "h = $ec_h_decimal"
+echo "G = ($ec_gx_decimal, $ec_gy_decimal)"
+
+# Chave privada e mensagem
+d_hex="3"
+d_decimal=$(echo "ibase=16; $d_hex" | bc)
+
+M_hex="3C5B"
+M_decimal=$(echo "ibase=16; $M_hex" | bc)
+
+# Exibir chave privada e mensagem
+echo "Chave privada (d) = $d_decimal"
+echo "Mensagem (M) = $M_decimal"
+
+# Gerar chave pública (Q)
+Q=$(./ecutils -ecdsa -ecdsa-ec-define \
+    -ecdsa-ec-define-p "$ec_p_hex" \
+    -ecdsa-ec-define-a "$ec_a_hex" \
+    -ecdsa-ec-define-b "$ec_b_hex" \
+    -ecdsa-ec-define-gx "$ec_gx_hex" \
+    -ecdsa-ec-define-gy "$ec_gy_hex" \
+    -ecdsa-ec-define-n "$ec_n_hex" \
+    -ecdsa-ec-define-h "$ec_h_hex" \
+    -ecdsa-private-key "$d_hex" \
+    -ecdsa-get-public-key)
+
+Qx_hex=$(echo "$Q" | cut -d' ' -f1)
+Qx_decimal=$(echo "ibase=16; $Qx_hex" | bc)
+
+Qy_hex=$(echo "$Q" | cut -d' ' -f2)
+Qy_decimal=$(echo "ibase=16; $Qy_hex" | bc)
+
+# Exibir chave pública (Q)
+echo "Chave pública (Q) = ($Qx_decimal, $Qy_decimal)"
+
+# Assinar a mensagem (M)
+U=$(./ecutils -ecdsa -ecdsa-ec-define \
+    -ecdsa-ec-define-p "$ec_p_hex" \
+    -ecdsa-ec-define-a "$ec_a_hex" \
+    -ecdsa-ec-define-b "$ec_b_hex" \
+    -ecdsa-ec-define-gx "$ec_gx_hex" \
+    -ecdsa-ec-define-gy "$ec_gy_hex" \
+    -ecdsa-ec-define-n "$ec_n_hex" \
+    -ecdsa-ec-define-h "$ec_h_hex" \
+    -ecdsa-private-key "$d_hex" \
+    -ecdsa-signature \
+    -ecdsa-signature-message "$M_hex")
+
+R_hex=$(echo "$U" | cut -d' ' -f1)
+R_decimal=$(echo "ibase=16; $R_hex" | bc)
+
+S_hex=$(echo "$U" | cut -d' ' -f2)
+S_decimal=$(echo "ibase=16; $S_hex" | bc)
+
+# Exibir assinatura
+echo "Assinatura:"
+echo "R = $R_decimal"
+echo "S = $S_decimal"
+
+# Verificar a assinatura
+V=$(./ecutils -ecdsa -ecdsa-ec-define \
+    -ecdsa-ec-define-p "$ec_p_hex" \
+    -ecdsa-ec-define-a "$ec_a_hex" \
+    -ecdsa-ec-define-b "$ec_b_hex" \
+    -ecdsa-ec-define-gx "$ec_gx_hex" \
+    -ecdsa-ec-define-gy "$ec_gy_hex" \
+    -ecdsa-ec-define-n "$ec_n_hex" \
+    -ecdsa-ec-define-h "$ec_h_hex" \
+    -ecdsa-verify-signature \
+    -ecdsa-verify-signature-public-key-px "$Qx_hex" \
+    -ecdsa-verify-signature-public-key-py "$Qy_hex" \
+    -ecdsa-verify-signature-r "$R_hex" \
+    -ecdsa-verify-signature-s "$S_hex" \
+    -ecdsa-verify-signature-signed-message "$M_hex")
+
+# Verificar o resultado da verificação e exibir apropriado
+if [ "$V" == "1" ]; then
+    echo "A assinatura é válida."
+else
+    echo "A assinatura é inválida."
+fi
+\end{verbatim}
+
+\anexo{Exemplo de implementação da soma e multiplicação de pontos em uma Curva Elíptica sobre um campo finito (Script em Python)} \label{anexo:9a31fc56-bcc9-4d1a-82bb-8fad31be217e}
+\begin{verbatim}
+def elliptic_curve_addition(P, Q):
+    """
+    Realiza a adição de dois pontos em uma curva elíptica.
+
+    Args:
+        P (tuple): As coordenadas do ponto P na forma (x, y).
+        Q (tuple): As coordenadas do ponto Q na forma (x, y).
+
+    Returns:
+        tuple: As coordenadas do ponto resultante da adição,
+         na forma (x, y).
+            Se a adição resultar no ponto no infinito,
+            retorna (None, None).
+    """
+    (x_1, y_1) = P
+    (x_2, y_2) = Q
+
+    if P == (None, None):
+        return Q
+
+    if Q == (None, None):
+        return P
+
+    if P == Q:
+        n = (3 * x_1**2 + a) % p
+        d = (2 * y_1) % p
+        try:
+            inv = pow(d, -1, p)
+        except:
+            return (
+                None,
+                None,
+            )  # Ponto no infinito
+        s = (n * inv) % p
+        x_3 = (s**2 - x_1 - x_1) % p
+        y_3 = (s * (x_1 - x_3) - y_1) % p
+        return (x_3, y_3)
+    else:
+        x_2, y_2 = Q
+        n = (y_2 - y_1) % p
+        d = (x_2 - x_1) % p
+        try:
+            inv = pow(d, -1, p)
+        except:
+            return (
+                None,
+                None,
+            )  # Ponto no infinito
+        s = (n * inv) % p
+        x_3 = (s**2 - x_1 - x_2) % p
+        y_3 = (s * (x_1 - x_3) - y_1) % p
+        return (x_3, y_3)
+
+
+def elliptic_curve_multiplication(k, G):
+    """
+    Realiza a multiplicação de um ponto por um escalar em
+    uma curva elíptica.
+
+    Args:
+        k (int): O escalar pelo qual o ponto será multiplicado.
+        G (tuple): As coordenadas do ponto G na forma (x, y),
+         que é a base da curva.
+
+    Returns:
+        tuple: As coordenadas do ponto resultante da
+        multiplicação, na forma (x, y).
+    """
+    if k == 0 or k >= n:
+        raise ValueError("k não está no intervalo 0 < k < n")
+
+    R = None
+
+    num_bits = k.bit_length()
+
+    for i in range(num_bits - 1, -1, -1):
+        if R is None:
+            R = G
+            continue
+
+        if R == (None, None):
+            R = G
+
+        R = elliptic_curve_addition(R, R)
+
+        if (k >> i) & 1:
+            if R == (None, None):
+                R = G
+            else:
+                R = elliptic_curve_addition(R, G)
+
+    return R
+\end{verbatim}
+
+\anexo{Exemplo de implementação do método de Koblitz (Script em Python)} \label{anexo:efaa994a-3caf-4704-bf42-c98f2418dab0}
+\begin{verbatim}
+def koblitz_encode(message: str) -> tuple:
+    """
+    Codifica uma mensagem utilizando o algoritmo de
+    Koblitz.
+
+    Args:
+        message: A mensagem a ser codificada.
+
+    Returns:
+        Uma tupla contendo o ponto codificado (x, y) e
+        o valor de j.
+
+    """
+    # Definindo os parâmetros do algoritmo
+    alphabet_size = (
+        2**8
+    )  # Tamanho do alfabeto, neste caso ASCII de 8 bits
+    message_length = len(
+        message
+    )  # Tamanho da mensagem de entrada
+    message_decimal = sum(
+        ord(message[k]) * alphabet_size**k
+        for k in range(message_length)
+    )  # Convertendo a mensagem em um número decimal
+    # Encontrando um ponto válido na curva de Koblitz
+    d = 100
+    for j in range(1, d - 1):
+        x = (
+            d * message_decimal + j
+        ) % p  # Para cada valor de j, calcula-se um
+        # valor x
+        s = (
+            x**3 + a * x + b
+        ) % p  # Calcula-se o valor de s utilizando a
+        # fórmula da curva elíptica
+        if s == pow(
+            s, (p + 1) // 2, p
+        ):  # Verifica se s é um quadrado perfeito
+            # (respeita a equação do ponto na curva)
+            y = pow(
+                s, (p + 1) // 4, p
+            )  # Encontra o valor de y utilizando a fórmula
+            # da curva elíptica
+            if (y**2) % p == (
+                x**3 + a * x + b
+            ) % p:  # Verifica se o ponto (x, y)
+                # está na curva
+                break
+
+    # Retorna o ponto codificado e o valor de j
+    return (x, y), j
+
+
+def koblitz_decode(point, j) -> str:
+    """
+    Decodifica um ponto codificado utilizando o algoritmo
+     de Koblitz.
+
+    Args:
+        point: O ponto codificado (x, y).
+        j: O valor de j utilizado na codificação.
+
+    Returns:
+        A mensagem decodificada.
+
+    """
+    # Decodifica o ponto (x, y) e o valor j para a mensagem
+    # original
+    d = 100
+    message_decimal = (
+        point[0] - j
+    ) // d  # Calcula o valor decimal da mensagem utilizando
+    # o valor de x, o valor de j e o parâmetro d
+    alphabet_size = (
+        2**8
+    )  # Tamanho do alfabeto, neste caso ASCII de 8 bits
+    decoded_message = []
+    while (
+        message_decimal != 0
+    ):  # Converte o número decimal em uma sequência de
+        # caracteres
+        decoded_message.append(
+            chr(message_decimal % alphabet_size)
+        )
+        message_decimal //= alphabet_size
+
+    # Retorna a mensagem decodificada como uma string
+    return "".join(decoded_message)
+
+
+def elliptic_curve_addition(P, Q):
+    """
+    Realiza a adição de dois pontos em uma curva elíptica.
+
+    Args:
+        P (tuple): As coordenadas do ponto P na forma (x, y).
+        Q (tuple): As coordenadas do ponto Q na forma (x, y).
+
+    Returns:
+        tuple: As coordenadas do ponto resultante da adição,
+         na forma (x, y).
+            Se a adição resultar no ponto no infinito,
+            retorna (None, None).
+    """
+    (x_1, y_1) = P
+    (x_2, y_2) = Q
+
+    if P == (None, None):
+        return Q
+
+    if Q == (None, None):
+        return P
+
+    if P == Q:
+        n = (3 * x_1**2 + a) % p
+        d = (2 * y_1) % p
+        try:
+            inv = pow(d, -1, p)
+        except:
+            return (
+                None,
+                None,
+            )  # Ponto no infinito
+        s = (n * inv) % p
+        x_3 = (s**2 - x_1 - x_1) % p
+        y_3 = (s * (x_1 - x_3) - y_1) % p
+        return (x_3, y_3)
+    else:
+        x_2, y_2 = Q
+        n = (y_2 - y_1) % p
+        d = (x_2 - x_1) % p
+        try:
+            inv = pow(d, -1, p)
+        except:
+            return (
+                None,
+                None,
+            )  # Ponto no infinito
+        s = (n * inv) % p
+        x_3 = (s**2 - x_1 - x_2) % p
+        y_3 = (s * (x_1 - x_3) - y_1) % p
+        return (x_3, y_3)
+\end{verbatim}
+
+\anexo{Exemplo de implementação do protocolo de ECDSA (Script em Python)} \label{anexo:cb388af7-af2f-47f9-b21f-1d0d0a95c9e9}
+\begin{verbatim}
+from random import randint
+
+
+def ecdsa_generate_signature(private_key, message_hash):
+    """
+    Gera uma assinatura ECDSA para uma determinada chave
+    privada e hash de mensagem.
+
+    Args:
+    private_key (int): A chave privada.
+    message_hash (int): O hash da mensagem a ser assinada.
+
+    Returns:
+    tuple: A assinatura ECDSA (r, s).
+
+    """
+    (r, s) = (0, 0)
+    while r == 0 or s == 0:
+        k = randint(1, n)
+        (x, _) = elliptic_curve_multiplication(k, G)
+        r = x % n
+        s = (
+            (message_hash + r * private_key) * pow(k, -1, n)
+        ) % n
+    return r, s
+
+
+def ecdsa_verify_signature(public_key, message_hash, r, s):
+    """
+    Verifica a validade de uma assinatura ECDSA.
+
+    Args:
+    public_key (tuple): O ponto de chave pública (x, y).
+    message_hash (int): O hash da mensagem assinada.
+    r (int): O primeiro componente da assinatura.
+    s (int): O segundo componente da assinatura.
+
+    Returns:
+    bool: True se a assinatura é válida, False caso contrário.
+
+    """
+    w = pow(s, -1, n)
+    u_1 = (message_hash * w) % n
+    u_2 = (r * w) % n
+    X = elliptic_curve_addition(
+        elliptic_curve_multiplication(u_1, G),
+        elliptic_curve_multiplication(u_2, public_key),
+    )
+    v = X[0] % n
+    return v == r    
+\end{verbatim}
+
